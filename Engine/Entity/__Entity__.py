@@ -6,8 +6,7 @@ import pygame
 class __Entity__(pygame.sprite.Sprite):
 
     def __init__(self):
-        super.__init__()
-        pass
+        super().__init__()
 
     def encode(self):
         pass

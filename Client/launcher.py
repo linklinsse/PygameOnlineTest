@@ -5,11 +5,11 @@ import os
 import sys
 import inspect
 
-from Client.main import main
-
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
+
+from Client.main import main
 
 PORT = 25665
 IP = "127.0.0.1"
