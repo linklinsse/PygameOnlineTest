@@ -37,7 +37,6 @@ class Main:
             self.socket.sendto('NEWP:{};'.format(self.pseudo).encode(), self.server_data)
             data, addr = self.socket.recvfrom(65535)
             data = data.decode("utf-8")
-            print(data)
             if data != "OKAY;":
                 print("Server did not answer to login")
                 self.running = False
