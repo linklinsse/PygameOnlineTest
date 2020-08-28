@@ -2,15 +2,21 @@
 # -*- coding: utf-8 -*-
 
 import socket
-import time
+
 from threading import Thread
+from input import InputHandleur
+from game import GameHandleur
+from network import NetworkHandleur
 
 class Main:
+    """
+        Main class of ther server, he handle the threads
+    """
 
-    gameTick = 60
+    game_tick = 60
 
     running = True
-    threadPool = []
+    thread_pool = []
 
     def __init__(self, port):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -19,49 +25,29 @@ class Main:
         print('Init on port:', port)
 
     def load(self):
-        self.threadPool.append(Thread(target=self.network_thread))
-        self.threadPool.append(Thread(target=self.command_input_thread))
-        self.threadPool.append(Thread(target=self.game_tick_thread))
+        """
+            Load all the treads into the thread_pool
+        """
+
+        self.thread_pool.append(Thread(target=NetworkHandleur(self).run))
+        self.thread_pool.append(Thread(target=InputHandleur(self).run))
+        self.thread_pool.append(Thread(target=GameHandleur(self).run))
 
     def run(self):
+        """
+            Start all threads then wait the end of running to close all threads
+        """
+
         print('Starting Server')
 
-        for thread in self.threadPool:
+        for thread in self.thread_pool:
             thread.start()
 
         while self.running:
             pass
 
-        for thread in self.threadPool:
+        for thread in self.thread_pool:
             thread.join()
-
-    def network_thread(self):
-        while self.running:
-            try :
-                data, addr = self.sock.recvfrom(65535)
-                self.handle_client(data, addr)
-            except socket.timeout:
-                pass
-
-    def command_input_thread(self):
-        while self.running:
-            cmd = input('> ').lower()
-            if cmd == 'stop':
-                print('STOPING SERVER')
-                self.running = False
-            elif cmd == "help":
-                print("[help] to see all commands")
-                print("[stop] to stop the server")
-            else:
-                print('Unknow command, type [help] to see all commands')
-
-    def game_tick_thread(self):
-        while self.running:
-            time.sleep(1/self.gameTick)
-
-    def handle_client(self, data, addr):
-        self.sock.sendto('Data Receved', addr)
-        self.sock.sendto(data, addr)
 
 if __name__ == "__main__":
     pass

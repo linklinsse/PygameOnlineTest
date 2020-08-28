@@ -9,12 +9,12 @@ current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfra
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
-from Client.main import main
+from Client.main import Main
 
 PORT = 25665
 IP = "127.0.0.1"
 
 if __name__ == "__main__":
-    prog = main(PORT, IP)
+    prog = Main(PORT, IP)
     prog.load()
     prog.run()

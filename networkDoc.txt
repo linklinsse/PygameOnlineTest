@@ -1,0 +1,24 @@
+[CMD ID]: [argument 1], [argumant 2], ... ; [CMD ID]: ...
+
+Client -> Server
+
+>> PING;
+<< PONG;
+To ping Server
+
+>> NEWP:[PSEUDO];
+<< OKAY // KOKO
+To connect to the server
+
+>> ACTN:[ENUM ACTION];
+
+<< UNKN
+Not ederstand command
+
+Server -> Client
+
+>> ENTL:[ENTITY 1 DATA], [ENTITY 2 DATA], ...;
+Entitys list sended to the client
+
+>> ENTD:[ENTITY 1 DATA], [ENTITY 2 DATA], ...;
+Entitys delta since last ping sended to the client
