@@ -24,6 +24,8 @@ class Player(IEntity):
         self.v_x = 0
         self.v_y = 0
 
+        self.initAction()
+
     def encode(self):
         """
             return formated data
@@ -49,28 +51,28 @@ class Player(IEntity):
 
         self.rect.move_ip(self.v_x, self.v_y)
 
+    def initAction(self):
+        self.fct_tab_acton = [
+            (EAction.MOVE_UP_START.value,       lambda self: setattr(self, 'v_y', -5) ),
+            (EAction.MOVE_UP_END.value,         lambda self: setattr(self, 'v_y', 0) ),
+            (EAction.MOVE_DOWN_START.value,     lambda self: setattr(self, 'v_y', 5) ),
+            (EAction.MOVE_DOWN_END.value,       lambda self: setattr(self, 'v_y', 0) ),
+            (EAction.MOVE_LEFT_START.value,     lambda self: setattr(self, 'v_x', -5) ),
+            (EAction.MOVE_LEFT_END.value,       lambda self: setattr(self, 'v_x', 0) ),
+            (EAction.MOVE_RIGHT_START.value,    lambda self: setattr(self, 'v_x', 5) ),
+            (EAction.MOVE_RIGHT_END.value,      lambda self: setattr(self, 'v_x', 0) ),
+        ]
+
     def doAction(self, actionList):
         actionList = actionList.split(',')
         for action in actionList:
             if not action:
                 continue
             action = int(action)
-            if action == EAction.MOVE_UP_START.value:
-                self.v_y = -1
-            elif action == EAction.MOVE_UP_END.value:
-                self.v_y = 0
-            if action == EAction.MOVE_DOWN_START.value:
-                self.v_y = 1
-            elif action == EAction.MOVE_DOWN_END.value:
-                self.v_y = 0
-            if action == EAction.MOVE_RIGHT_START.value:
-                self.v_x = 1
-            elif action == EAction.MOVE_RIGHT_END.value:
-                self.v_x = 0
-            elif action == EAction.MOVE_LEFT_START.value:
-                self.v_x = -1
-            elif action == EAction.MOVE_LEFT_END.value:
-                self.v_x = 0
+            for fct_action in self.fct_tab_acton:
+                if action == fct_action[0]:
+                    fct_action[1](self)
+                    break
 
 if __name__ == "__main__":
     pass
