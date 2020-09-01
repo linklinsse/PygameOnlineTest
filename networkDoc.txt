@@ -10,10 +10,16 @@ To ping Server
 << OKAY // KOKO
 To connect to the server
 
->> ACTN:[ENUM ACTION];
+>> ACTN:[ACTION 1], [ACTION 2], ...;
+
+>> GUPD;
+get update, the server can return ENTL or ENTD
 
 << UNKN
 Not ederstand command
+
+<< UNLO
+Not login
 
 Server -> Client
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import pygame
 import socket
 
 from threading import Thread
@@ -17,6 +18,9 @@ class Main:
 
     running = True
     thread_pool = []
+
+    entity_list = pygame.sprite.Group()
+    player_list = pygame.sprite.Group()
 
     def __init__(self, port):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

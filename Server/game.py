@@ -10,6 +10,8 @@ class GameHandleur:
 
     def run(self):
         while self.server.running:
+            self.server.entity_list.update()
+            self.server.player_list.update()
             time.sleep(1/self.server.game_tick)
 
 if __name__ == "__main__":

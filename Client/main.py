@@ -3,6 +3,7 @@
 
 from threading import Thread
 import socket
+import pygame
 from graphical import GraphicalHandleur
 from event import EventHandleur
 from network import NetworkHandleur
@@ -18,6 +19,9 @@ class Main:
         self.server_data = (ip, port)
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.settimeout(10)
+
+        self.entity_group = pygame.sprite.Group()
+        self.user_action = []
 
         try:
             self.socket.sendto('PING;'.encode(), self.server_data)
