@@ -27,7 +27,6 @@ class EventHandleur:
         ]
 
     def run(self):
-        clock = pygame.time.Clock()
         while self.server.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -43,7 +42,12 @@ class EventHandleur:
                         if event.key == key[0]:
                             self.server.user_action.append(key[1])
 
-            clock.tick(self.server.game_tick)
+            tmp = pygame.mouse.get_pos()
+            if self.server.player:
+                self.server.user_mouse_pose = (tmp[0] - 825/2,
+                    tmp[1] - 615/2)
+
+            self.server.clock.tick(self.server.game_tick)
 
 if __name__ == "__main__":
     pass

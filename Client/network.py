@@ -4,7 +4,7 @@
 import socket
 import pygame
 
-from Engine.Entity.player import Player
+from Engine.Entity.idToEntity import IDToEntity
 
 class NetworkHandleur:
 
@@ -12,19 +12,24 @@ class NetworkHandleur:
         self.server = server
 
     def run(self):
-        clock = pygame.time.Clock()
         while self.server.running:
-            clock.tick(self.server.game_tick)
             try:
-                self.server.socket.sendto(self.encodeActions().encode(), self.server.server_data)
+                self.server.socket.sendto(self.send_to_server().encode(), self.server.server_data)
                 data, addr = self.server.socket.recvfrom(65535)
-                try:
-                    self.handle_server(data)
-                except:
-                    pass
+
+                self.handle_server(data)
             except socket.timeout:
                 print("Server do not respond")
                 self.server.running = False
+            self.server.clock.tick(self.server.game_tick)
+
+    def send_to_server(self):
+        ret = ''
+
+        ret += self.encodeActions()
+        ret += "LOOK:{},{};".format(self.server.user_mouse_pose[0], self.server.user_mouse_pose[1])
+
+        return ret
 
     def encodeActions(self):
         ret = "ACTN:"
@@ -47,10 +52,13 @@ class NetworkHandleur:
         self.server.entity_group.empty()
 
         for entity in all_entity:
-            tmp = Player()
+            tmp = IDToEntity(entity[:4])
             tmp.decode(entity)
-            self.server.entity_group.add(tmp)
-
+            tmp.update()
+            if tmp.name == self.server.pseudo:
+                self.server.player = tmp
+            else:
+                self.server.entity_group.add(tmp)
 
 
 if __name__ == "__main__":

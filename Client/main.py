@@ -21,7 +21,10 @@ class Main:
         self.socket.settimeout(10)
 
         self.entity_group = pygame.sprite.Group()
+        self.player = None
         self.user_action = []
+        self.user_mouse_pose = [0, 0]
+        self.clock = pygame.time.Clock()
 
         try:
             self.socket.sendto('PING;'.encode(), self.server_data)
@@ -48,8 +51,8 @@ class Main:
             print("Server not answer")
             self.running = False
 
-        self.thread_pool.append(Thread(target=NetworkHandleur(self).run))
         self.thread_pool.append(Thread(target=GraphicalHandleur(self).run))
+        self.thread_pool.append(Thread(target=NetworkHandleur(self).run))
         self.thread_pool.append(Thread(target=EventHandleur(self).run))
 
     def run(self):
@@ -60,7 +63,7 @@ class Main:
             thread.start()
 
         while self.running:
-            pass
+            self.clock.tick(self.game_tick)
 
         for thread in self.thread_pool:
             thread.join()

@@ -11,9 +11,10 @@ To ping Server
 To connect to the server
 
 >> ACTN:[ACTION 1], [ACTION 2], ...;
+<< GUPD;
+Server answer ENTL or ENTD
 
->> GUPD;
-get update, the server can return ENTL or ENTD
+>> LOOK:[mouse x],[mouse y];
 
 << UNKN
 Not ederstand command
@@ -28,3 +29,5 @@ Entitys list sended to the client
 
 >> ENTD:[ENTITY 1 DATA], [ENTITY 2 DATA], ...;
 Entitys delta since last ping sended to the client
+
+>> INVE:[ITEM 1 DATA],[ITEM 2 DATA], ...;

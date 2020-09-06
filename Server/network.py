@@ -18,6 +18,7 @@ class NetworkHandleur:
             ('PING', self.pong, False),
             ('NEWP', self.new_player, False),
             ('ACTN', self.player_action, True),
+            ('LOOK', self.player_look, True),
         ]
 
         self.register_user = []
@@ -91,7 +92,7 @@ class NetworkHandleur:
                 return
 
         self.register_user.append((addr, pseudo, time.time()))
-        self.server.player_list.add(Player(10, 0, pseudo, addr[1]))
+        self.server.player_list.add(Player(50, 50, pseudo, addr[1]))
         self.server.sock.sendto("OKAY;".encode(), addr)
 
     def player_action(self, data, addr):
@@ -104,6 +105,18 @@ class NetworkHandleur:
         for player in self.server.player_list:
             if player.user_id == addr[1]:
                 player.doAction(action)
+                break
+
+    def player_look(self, data, addr):
+        """
+            Handle the player action inside the game
+        """
+
+        action = data.split(':')[1]
+
+        for player in self.server.player_list:
+            if player.user_id == addr[1]:
+                player.look(action.split(','))
                 break
 
         self.server.sock.sendto(("ENTL:" + self.encode_all_entity(self.server.player_list) + ";").encode(), addr)
